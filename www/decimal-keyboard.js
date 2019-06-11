@@ -51,19 +51,24 @@ DecimalKeyboard.addDecimal = function(){
     var caretPosStart = activeElement.selectionStart;
     var caretPosEnd = activeElement.selectionEnd;
     var first='';
-    var last='';
+	var last='';
+	var networkNumberRegex = new RegExp(
+		/^((\d{1,3}\.{0,1})$|(\d{1,3}\.\d{1,3}\.{0,1})$|(\d{1,3}\.\d{1,3}\.\d{1,3}\.{0,1})$|(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$)/g
+	  );
     
     first = value.substring(0, caretPosStart);
     last = value.substring(caretPosEnd);
     
     if(caretPosStart == 0 || !DecimalKeyboard.isDecimal()) {
         return;
-    }
-
-    if(allowMultipleDecimals){
-        valueToSet = first+decimalChar+last;
+	}
+	
+	
+	var nextValue = first+decimalChar+last;
+    if(allowMultipleDecimals && nextValue.match(networkNumberRegex)){
+        valueToSet = nextValue;
     }else{
-        if(value.indexOf('.') > -1 ){
+        if(value.indexOf(decimalChar) > -1 ){
             return;
         }
         valueToSet = first+decimalChar+last;
